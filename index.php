@@ -1,6 +1,7 @@
 <?php
+session_start();
 header('Content-Type: text/html; charset=utf-8');
-require 'config.php';
+$pdo = new PDO("mysql:host=localhost;dbname=korochki_db;charset=utf8", "root", "");
 
 if (isset($_SESSION['user_id'])) {
     header('Location: dashboard.php');
@@ -11,28 +12,26 @@ $error = '';
 
 // Регистрация
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['register'])) {
-    $username = trim($_POST['username']);
-    $email = trim($_POST['email']);
-    // Вместо password_hash используем старый md5 (менее безопасно, но работает)
-    $password = md5($_POST['password']);
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
     
-    try {
-        $stmt = $pdo->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
-        $stmt->execute(array($username, $email, $password));
+    $sql = "INSERT INTO users (username, email, password) VALUES ('$username', '$email', '$password')";
+    if ($pdo->exec($sql)) {
         $error = "Регистрация успешна! Теперь войдите.";
-    } catch(PDOException $e) {
-        $error = "Ошибка: пользователь или email уже существует.";
+    } else {
+        $error = "Ошибка регистрации.";
     }
 }
 
 // Вход
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])) {
-    $username = trim($_POST['username']);
-    $password = md5($_POST['password']);
+    $username = $_POST['username'];
+    $password = $_POST['password'];
     
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE (username = ? OR email = ?) AND password = ?");
-    $stmt->execute(array($username, $username, $password));
-    $user = $stmt->fetch();
+    $sql = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+    $result = $pdo->query($sql);
+    $user = $result->fetch();
     
     if ($user) {
         $_SESSION['user_id'] = $user['id'];
@@ -55,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])) {
 <body>
     <h2>Вход</h2>
     <form method="post">
-        <input type="text" name="username" placeholder="Логин или Email" required><br><br>
+        <input type="text" name="username" placeholder="Логин" required><br><br>
         <input type="password" name="password" placeholder="Пароль" required><br><br>
         <button type="submit" name="login">Войти</button>
     </form>

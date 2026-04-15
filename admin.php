@@ -1,6 +1,7 @@
 <?php
+session_start();
 header('Content-Type: text/html; charset=utf-8');
-require 'config.php';
+$pdo = new PDO("mysql:host=localhost;dbname=korochki_db;charset=utf8", "root", "");
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
     header('Location: index.php');
@@ -11,18 +12,15 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin') {
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_status'])) {
     $request_id = $_POST['request_id'];
     $new_status = $_POST['status'];
-    $stmt = $pdo->prepare("UPDATE requests SET status = ? WHERE id = ?");
-    $stmt->execute(array($new_status, $request_id));
+    
+    $sql = "UPDATE requests SET status = '$new_status' WHERE id = $request_id";
+    $pdo->exec($sql);
 }
 
-// Получение всех заявок с именами пользователей
-$stmt = $pdo->query("
-    SELECT r.*, u.username 
-    FROM requests r 
-    JOIN users u ON r.user_id = u.id 
-    ORDER BY r.created_at DESC
-");
-$all_requests = $stmt->fetchAll();
+// Получение всех заявок
+$sql = "SELECT r.*, u.username FROM requests r JOIN users u ON r.user_id = u.id ORDER BY r.created_at DESC";
+$result = $pdo->query($sql);
+$all_requests = $result->fetchAll();
 
 // Получение всех пользователей
 $users = $pdo->query("SELECT id, username, email, role FROM users")->fetchAll();
@@ -46,9 +44,9 @@ $users = $pdo->query("SELECT id, username, email, role FROM users")->fetchAll();
         <?php foreach ($all_requests as $req): ?>
         <tr>
             <td><?php echo $req['id']; ?></td>
-            <td><?php echo htmlspecialchars($req['username']); ?></td>
-            <td><?php echo htmlspecialchars($req['title']); ?></td>
-            <td><?php echo htmlspecialchars($req['description']); ?></td>
+            <td><?php echo $req['username']; ?></td>
+            <td><?php echo $req['title']; ?></td>
+            <td><?php echo $req['description']; ?></td>
             <td>
                 <form method="post" style="margin:0">
                     <input type="hidden" name="request_id" value="<?php echo $req['id']; ?>">
@@ -61,7 +59,6 @@ $users = $pdo->query("SELECT id, username, email, role FROM users")->fetchAll();
                 </form>
             </td>
             <td><?php echo $req['created_at']; ?></td>
-            <td><?php echo $req['created_at']; ?></td>
         </tr>
         <?php endforeach; ?>
     </table>
@@ -72,8 +69,8 @@ $users = $pdo->query("SELECT id, username, email, role FROM users")->fetchAll();
         <?php foreach ($users as $u): ?>
         <tr>
             <td><?php echo $u['id']; ?></td>
-            <td><?php echo htmlspecialchars($u['username']); ?></td>
-            <td><?php echo htmlspecialchars($u['email']); ?></td>
+            <td><?php echo $u['username']; ?></td>
+            <td><?php echo $u['email']; ?></td>
             <td><?php echo $u['role']; ?></td>
         </tr>
         <?php endforeach; ?>

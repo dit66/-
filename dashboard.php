@@ -1,6 +1,7 @@
 <?php
+session_start();
 header('Content-Type: text/html; charset=utf-8');
-require 'config.php';
+$pdo = new PDO("mysql:host=localhost;dbname=korochki_db;charset=utf8", "root", "");
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: index.php');
@@ -12,18 +13,18 @@ $message = '';
 
 // Создание заявки
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_request'])) {
-    $title = trim($_POST['title']);
-    $description = trim($_POST['description']);
+    $title = $_POST['title'];
+    $description = $_POST['description'];
     
-    $stmt = $pdo->prepare("INSERT INTO requests (user_id, title, description) VALUES (?, ?, ?)");
-    $stmt->execute(array($user_id, $title, $description));
+    $sql = "INSERT INTO requests (user_id, title, description) VALUES ($user_id, '$title', '$description')";
+    $pdo->exec($sql);
     $message = "Заявка создана!";
 }
 
 // Получение заявок пользователя
-$stmt = $pdo->prepare("SELECT * FROM requests WHERE user_id = ? ORDER BY created_at DESC");
-$stmt->execute(array($user_id));
-$requests = $stmt->fetchAll();
+$sql = "SELECT * FROM requests WHERE user_id = $user_id ORDER BY created_at DESC";
+$result = $pdo->query($sql);
+$requests = $result->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -55,8 +56,8 @@ $requests = $stmt->fetchAll();
         <?php foreach ($requests as $req): ?>
         <tr>
             <td><?php echo $req['id']; ?></td>
-            <td><?php echo htmlspecialchars($req['title']); ?></td>
-            <td><?php echo htmlspecialchars($req['description']); ?></td>
+            <td><?php echo $req['title']; ?></td>
+            <td><?php echo $req['description']; ?></td>
             <td><?php echo $req['status']; ?></td>
             <td><?php echo $req['created_at']; ?></td>
         </tr>
