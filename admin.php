@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_status'])) {
     $request_id = $_POST['request_id'];
     $new_status = $_POST['status'];
     $stmt = $pdo->prepare("UPDATE requests SET status = ? WHERE id = ?");
-    $stmt->execute([$new_status, $request_id]);
+    $stmt->execute(array($new_status, $request_id));
 }
 
 // Получение всех заявок с именами пользователей
@@ -31,6 +31,7 @@ $users = $pdo->query("SELECT id, username, email, role FROM users")->fetchAll();
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Админ-панель</title>
 </head>
 <body>
@@ -60,7 +61,7 @@ $users = $pdo->query("SELECT id, username, email, role FROM users")->fetchAll();
                 </form>
             </td>
             <td><?php echo $req['created_at']; ?></td>
-            <td></td>
+            <td><?php echo $req['created_at']; ?></td>
         </tr>
         <?php endforeach; ?>
     </table>

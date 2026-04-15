@@ -16,19 +16,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['create_request'])) {
     $description = trim($_POST['description']);
     
     $stmt = $pdo->prepare("INSERT INTO requests (user_id, title, description) VALUES (?, ?, ?)");
-    $stmt->execute([$user_id, $title, $description]);
+    $stmt->execute(array($user_id, $title, $description));
     $message = "Заявка создана!";
 }
 
 // Получение заявок пользователя
 $stmt = $pdo->prepare("SELECT * FROM requests WHERE user_id = ? ORDER BY created_at DESC");
-$stmt->execute([$user_id]);
+$stmt->execute(array($user_id));
 $requests = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Личный кабинет</title>
 </head>
 <body>
