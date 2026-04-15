@@ -1,0 +1,67 @@
+Всё правильно! Сначала нужно создать базу данных через phpMyAdmin. Вот пошаговая инструкция:
+
+## 1. Зайдите в phpMyAdmin
+
+Откройте браузер и перейдите по адресу:
+```
+http://localhost/phpmyadmin
+```
+или
+```
+http://localhost/openserver/phpmyadmin/
+```
+
+## 2. Создайте базу данных
+
+Нажмите на вкладку **"Базы данных"** (или "Databases") сверху.
+
+В поле **"Имя базы данных"** введите:
+```
+korochki_db
+```
+
+Выберите кодировку: **utf8_general_ci** (или `utf8mb4_general_ci`)
+
+Нажмите кнопку **"Создать"**
+
+## 3. Создайте таблицы
+
+После создания базы нажмите на неё слева (korochki_db)
+
+Откройте вкладку **"SQL"** (или "Выполнить SQL-запрос")
+
+Скопируйте и вставьте этот код:
+
+```sql
+-- Таблица пользователей
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('user', 'admin') DEFAULT 'user',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Таблица заявок
+CREATE TABLE requests (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    status ENUM('new', 'in_progress', 'completed') DEFAULT 'new',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+```
+
+Нажмите кнопку **"Вперёд"** (или "Go")
+
+## 4. Всё готово!
+
+Теперь база данных создана. Возвращайтесь на сайт `http://localhost/korochki/` и регистрируйтесь.
+
+## Важно:
+После регистрации первого пользователя зайдите снова в phpMyAdmin, откройте таблицу `users` и измените `role` с `user` на `admin` у вашего аккаунта, чтобы получить доступ к админ-панели.
+
+Вот и всё! После этого сайт заработает 👍
