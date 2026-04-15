@@ -1,0 +1,80 @@
+<?php
+header('Content-Type: text/html; charset=utf-8');
+require 'config.php';
+
+if (isset($_SESSION['user_id'])) {
+    header('Location: dashboard.php');
+    exit();
+}
+
+$error = '';
+
+// Регистрация
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['register'])) {
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
+    $password = $_POST['password']; // Просто берем пароль как есть
+    
+    try {
+        $stmt = $pdo->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
+        $stmt->execute(array($username, $email, $password));
+        $error = "Регистрация успешна! Теперь войдите.";
+    } catch(PDOException $e) {
+        $error = "Ошибка: пользователь или email уже существует.";
+    }
+}
+
+// Вход
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])) {
+    $username = trim($_POST['username']);
+    $password = $_POST['password']; // Просто берем пароль как есть
+    
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE (username = ? OR email = ?) AND password = ?");
+    $stmt->execute(array($username, $username, $password));
+    $user = $stmt->fetch();
+    
+    if ($user) {
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['username'] = $user['username'];
+        $_SESSION['role'] = $user['role'];
+        header('Location: dashboard.php');
+        exit();
+    } else {
+        $error = "Неверный логин или пароль.";
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Вход / Регистрация</title>
+</head>
+<body>
+    <h2>Вход</h2>
+    <form method="post">
+        <input type="text" name="username" placeholder="Логин или Email" required><br><br>
+        <input type="password" name="password" placeholder="Пароль" required><br><br>
+        <button type="submit" name="login">Войти</button>
+    </form>
+
+    <h2>Регистрация</h2>
+    <form method="post">
+        <input type="text" name="username" placeholder="Логин" required><br><br>
+        <input type="email" name="email" placeholder="Email" required><br><br>
+        <input type="password" name="password" placeholder="Пароль" required><br><br>
+        <button type="submit" name="register">Зарегистрироваться</button>
+    </form>
+    <p style="color:red"><?php echo $error; ?></p>
+</body>
+</html>
+
+
+Также нужно изменить структуру таблицы в БД
+Зайдите в phpMyAdmin и выполните этот SQL запрос (он очистит старые хешированные пароли):
+
+sql
+-- Очищаем таблицу пользователей (удалим старых пользователей с хешами)
+TRUNCATE TABLE requests;
+TRUNCATE TABLE users;
