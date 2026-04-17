@@ -1,0 +1,85 @@
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #0d6efd;
+    text-decoration: none;
+}
+
+.logo:hover {
+    transform: scale(1.02);
+}
+
+.service-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-radius: 12px;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.stat-card {
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+}
+
+.table tbody tr {
+    transition: background 0.2s;
+}
+
+.table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+.status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-new {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-progress {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.status-completed {
+    background: #d4edda;
+    color: #155724;
+}
+
+.btn {
+    transition: transform 0.1s;
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+.nav-link {
+    transition: all 0.2s;
+}
+
+.nav-link:hover {
+    transform: translateY(-2px);
+}
+
+.card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}

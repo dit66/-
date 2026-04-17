@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корочки | Личный кабинет</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-light">
+    <div class="container py-4">
+        <nav class="navbar navbar-expand-lg bg-white rounded-3 shadow-sm mb-4">
+            <div class="container-fluid">
+                <a class="navbar-brand logo" href="index.html">🎓 Корочки</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="dashboard.html">Мои заявки</a></li>
+                        <li class="nav-item"><a class="nav-link" href="admin.html">Админ-панель</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.html">Выйти</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+                <h2>Добро пожаловать, Александр!</h2>
+                <p class="mb-0">Ваша роль: <strong>Студент</strong></p>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+                <h3 class="mb-3">Создать заявку на помощь</h3>
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Тип работы</label>
+                        <select class="form-select">
+                            <option>Дипломная работа</option>
+                            <option>Курсовая работа</option>
+                            <option>Домашнее задание</option>
+                            <option>Реферат/эссе</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Тема</label>
+                        <input type="text" class="form-control" placeholder="Кратко опишите задание">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Описание</label>
+                        <textarea rows="4" class="form-control" placeholder="Подробно опишите, что нужно сделать..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Срок выполнения</label>
+                        <input type="date" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-success">📤 Отправить заявку</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <h3 class="mb-3">Мои заявки</h3>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>ID</th><th>Тип</th><th>Тема</th><th>Статус</th><th>Срок</th><th>Дата</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#001</td><td>Диплом</td><td>Анализ рынка</td>
+                                <td><span class="status status-progress">В работе</span></td>
+                                <td>25.04.2026</td><td>17.04.2026</td>
+                            </tr>
+                            <tr>
+                                <td>#002</td><td>Курсовая</td><td>Базы данных</td>
+                                <td><span class="status status-new">Новая</span></td>
+                                <td>30.04.2026</td><td>16.04.2026</td>
+                            </tr>
+                            <tr>
+                                <td>#003</td><td>ДЗ</td><td>Алгоритмы</td>
+                                <td><span class="status status-completed">Завершена</span></td>
+                                <td>20.04.2026</td><td>15.04.2026</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
